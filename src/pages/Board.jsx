@@ -3,7 +3,8 @@ import "@tldraw/tldraw/tldraw.css";
 import { useCallback, useEffect, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
 import { useParams } from "react-router-dom";
-const URL = "ws://localhost:3000/cable";
+
+const URL = import.meta.env.VITE_BACKEND_URL_WS;
 
 const Board = () => {
   // Храним снимок в состоянии
@@ -20,11 +21,8 @@ const Board = () => {
   );
 
   useEffect(() => {
-    console.log(editor);
-
     if (editor) {
       const consumer = createConsumer(URL);
-      console.log("123");
 
       const boardChannel = consumer.subscriptions.create(
         {
@@ -36,7 +34,7 @@ const Board = () => {
             console.log("connected");
           },
           disconnected: () => {
-            console.log("disc");
+            console.log("disconnect");
           },
           send_json(data) {
             this.perform("send_json", { data, id: params.id });

@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -11,16 +11,16 @@ const HomePage = () => {
 
   const getBoards = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3000/api/boards");
+      const { data } = await api.get("boards");
       setAllBoards(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   const onDelete = async ({ id }) => {
     try {
-      await axios.delete("http://localhost:3000/api/boards/delete", {
+      await api.delete("boards/delete", {
         data: {
           id,
         },
@@ -43,12 +43,10 @@ const HomePage = () => {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      const response = await axios.post(
-        "http://localhost:3000/api/boards/create",
-        {
-          name,
-        }
-      );
+      const response = await api.post("boards/create", {
+        name,
+      });
+      await getBoards();
 
       if (response.status === 200) {
         const message = response.data.message;
@@ -58,8 +56,6 @@ const HomePage = () => {
       if (error.response?.data.error) {
         setErrorText(error.response.data.error);
       }
-      console.error(error);
-      console.log(errorText);
     }
   };
 
