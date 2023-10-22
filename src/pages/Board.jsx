@@ -2,17 +2,18 @@ import { Tldraw } from "@tldraw/tldraw";
 import "@tldraw/tldraw/tldraw.css";
 import { useCallback, useEffect, useState } from "react";
 import { createConsumer } from "@rails/actioncable";
+import { useParams } from "react-router-dom";
 const URL = "ws://localhost:3000/cable";
 
 const Board = () => {
   // Храним снимок в состоянии
   const [editor, setEditor] = useState(null);
+  const params = useParams();
   const editorEventHandler = useCallback(
     (event, channel) => {
       if (event.name === "pointer_up") {
         const snapshot = editor.store.getSnapshot();
         channel.send_json(snapshot);
-        console.log(channel);
       }
     },
     [editor]
@@ -28,7 +29,7 @@ const Board = () => {
       const boardChannel = consumer.subscriptions.create(
         {
           channel: "BoardChannel",
-          username: "cool_kid_20",
+          id: params.id,
         },
         {
           connected: () => {
@@ -38,11 +39,9 @@ const Board = () => {
             console.log("disc");
           },
           send_json(data) {
-            console.log(data);
-            this.perform("send_json", data);
+            this.perform("send_json", { data, id: params.id });
           },
           received: (data) => {
-            console.log(data, "test");
             if (data instanceof Object) {
               editor.store.loadSnapshot(data);
             }
@@ -54,7 +53,7 @@ const Board = () => {
         consumer.disconnect();
       };
     }
-  }, [editor, editorEventHandler]);
+  }, [editor, editorEventHandler, params]);
 
   const onDrawMount = useCallback((instance) => {
     setEditor(instance);
