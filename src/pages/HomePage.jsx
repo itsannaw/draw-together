@@ -6,10 +6,16 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [allBoards, setAllBoards] = useState([]);
+  const [errorText, setErrorText] = useState("");
+  const [message, setMessage] = useState("");
 
   const getBoards = async () => {
-    const { data } = await axios.get("http://localhost:3000/api/boards");
-    setAllBoards(data);
+    try {
+      const { data } = await axios.get("http://localhost:3000/api/boards");
+      setAllBoards(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onDelete = async ({ id }) => {
@@ -21,6 +27,7 @@ const HomePage = () => {
       });
       await getBoards();
     } catch (error) {
+      setErrorText(error);
       console.error(error);
     }
   };
@@ -36,11 +43,23 @@ const HomePage = () => {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      await axios.post("http://localhost:3000/api/boards/create", {
-        name,
-      });
+      const response = await axios.post(
+        "http://localhost:3000/api/boards/create",
+        {
+          name,
+        }
+      );
+
+      if (response.status === 200) {
+        const message = response.data.message;
+        setMessage(message);
+      }
     } catch (error) {
+      if (error.response?.data.error) {
+        setErrorText(error.response.data.error);
+      }
       console.error(error);
+      console.log(errorText);
     }
   };
 
@@ -73,6 +92,12 @@ const HomePage = () => {
             </button>
           </div>
         </div>
+        <span className="flex justify-center text-red-500 text-[12px] font-semibold">
+          {errorText}
+        </span>
+        <span className="flex justify-center text-green-500 text-[12px] font-semibold">
+          {message}
+        </span>
         <div className="flex flex-col gap-5">
           <div className="flex justify-center  mt-[20px]">
             <span className="font-semibold text-[18px]">Boards list:</span>
@@ -90,7 +115,7 @@ const HomePage = () => {
                   </div>
                   <div className="flex gap-2">
                     <button
-                      onClick={() => navigate("board")}
+                      onClick={() => navigate(`/board/${item.id}`)}
                       type="button"
                       className="text-gray-900 bg-gradient-to-r from-teal-50 to-lime-50 hover:bg-gradient-to-l hover:from-teal-100 hover:to-lime-100 focus:ring-4 focus:outline-none focus:ring-lime-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     >
