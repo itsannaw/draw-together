@@ -21,6 +21,7 @@ const Board = () => {
   );
 
   useEffect(() => {
+    console.log("123");
     if (editor) {
       const consumer = createConsumer(URL);
 
@@ -51,7 +52,7 @@ const Board = () => {
         consumer.disconnect();
       };
     }
-  }, [editor, editorEventHandler, params]);
+  }, [editor, editorEventHandler, params.id]);
 
   const onDrawMount = useCallback((instance) => {
     setEditor(instance);
