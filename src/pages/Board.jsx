@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 const URL = import.meta.env.VITE_BACKEND_URL_WS;
 
 const Board = () => {
-  // Храним снимок в состоянии
   const [editor, setEditor] = useState(null);
   const params = useParams();
   const editorEventHandler = useCallback(
