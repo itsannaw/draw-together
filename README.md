@@ -1,8 +1,21 @@
-# React + Vite
+# Draw Together
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The application is a "collaborative drawing boadr" for everyone. 
 
-Currently, two official plugins are available:
+• No registration or authentication, all users have immediate access to the "boards" list (the user only provides arbitrary nick-name).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+• Each user can create board or join existing boards.
+
+• Several users can draw on the same board simultaneously. When somebody draw something, it appears to other users "immediately".
+
+• Everything drawn on the board is stored "forever" (if user joins this board later, he/she sees everything what was created before).
+
+• Drawing area fill the whole window (except, probably, the tool panel) and scale/scroll adequately.
+
+• Ability to erase previously draw elements.
+
+• Several tools ("text", "rectangle", "circle", etc.) with colors.
+
+• Export to jpeg option.
+
+Backend (Ruby on Rails): https://github.com/itsannaw/draw-together-backend
