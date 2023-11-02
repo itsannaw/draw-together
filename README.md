@@ -19,3 +19,8 @@ The application is a "collaborative drawing boadr" for everyone.
 • Export to jpeg option.
 
 Backend (Ruby on Rails): https://github.com/itsannaw/draw-together-backend
+
+ ### Preview 
+ 
+![Picture 1](public/demo1.jpg)
+![Picture 2](public/demo2.jpg)
